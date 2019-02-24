@@ -24,8 +24,10 @@ def send_temp(arg):
         sleep(0.1)
 
     temp  = str(thermo3.get_temperature())
-    rcall = "https://api.thingspeak.com/update?api_key={}&field1={}".format(KEY, temp)
-    print(rcall)
+    rcall = []
+    rcall.append("wget")
+    rcall.append("https://api.thingspeak.com/update?api_key={}&field1={}".format(KEY, temp))
+    subprocess.run(rcall)
 
 
 led.init()
