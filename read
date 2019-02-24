@@ -1,22 +1,46 @@
 #!/usr/bin/env python3
-"""
-  based on letmecreate python example.
-"""
 
-from letmecreate.core import i2c
 from letmecreate.core.common import MIKROBUS_1
+from letmecreate.core.common import MIKROBUS_2
+from letmecreate.core import led
+from letmecreate.core import i2c
+from letmecreate.click import motion
 from letmecreate.click import thermo3
-import subprocess
+from time import sleep
+
+KEY = "26ZRSL4VV3NGS7UB"
 
 
-# Initialise I2C on Mikrobus 1
+
+def send_temp(arg):
+    # Only flash LED's when motion starts getting detected.
+    if arg != 1:
+        return
+
+    for i in range(10):
+        led.switch_on(led.ALL_LEDS)
+        sleep(0.1)
+        led.switch_off(led.ALL_LEDS)
+        sleep(0.1)
+
+    temp  = str(thermo3.get_temperature())
+    rcall = "https://api.thingspeak.com/update?api_key={}&field1={}".format(KEY, temp)
+    print(rcall)
+
+
+led.init()
 i2c.init()
+
 i2c.select_bus(MIKROBUS_1)
 
-# Read temperature
-thermo3.enable(0)
-print('{} degrees celsius'.format(thermo3.get_temperature()))
-thermo3.disable()
+thermo3.enable(MIKROBUS_1)
+motion.enable(MIKROBUS_2)
 
-# Release I2C
-i2c.release()
+motion.attach_callback(MIKROBUS_2, send_temp)
+
+print("LED's will flash when Motion Click detects a movement.\n")
+print("Press Ctrl+C to quit.\n")
+
+
+while True:
+    pass
