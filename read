@@ -7,6 +7,7 @@ from letmecreate.core import i2c
 from letmecreate.click import motion
 from letmecreate.click import thermo3
 from time import sleep
+import subprocess
 
 KEY = "26ZRSL4VV3NGS7UB"
 
