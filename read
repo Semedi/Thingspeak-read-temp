@@ -6,6 +6,7 @@
 from letmecreate.core import i2c
 from letmecreate.core.common import MIKROBUS_1
 from letmecreate.click import thermo3
+import subprocess
 
 
 # Initialise I2C on Mikrobus 1
